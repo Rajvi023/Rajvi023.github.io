@@ -74,7 +74,7 @@
     .append("circle")
       .attr("cx", function(d){ return(x(d.name))+100})
       .attr("cy", height-30)
-      .attr("r", 13)
+      .attr("r", 0)
       .style("fill", "purple")
 	
 	/*svgT
@@ -116,7 +116,7 @@
         .join(' ');
     })
     .style("fill", "none")
-    .attr("stroke", "black");
+    .attr("stroke", "lightgray");
 	
 	 var tooltip = d3.select("body")
 	.append("div")
@@ -146,6 +146,16 @@
       })
 	  .on("mousemove", function(){return tooltip.style("top", (event.pageY+10)+"px").style("left",(event.pageX+10)+"px");});
 	  //.on("mouseout", function(){return tooltip.style("visibility", "hidden");});
+	  
+	  nodes
+	  .transition()
+	  .duration(2000)
+	  .attr("r",12);
+	  
+	  links
+	  .transition()
+	  .duration(2000)
+	  .attr("stroke","black");
 	});
 </script>
 
@@ -245,7 +255,7 @@ Observed the performance of map, reduce, and shuffling and sorting phases, inclu
 		.padding(.1);
 		
 	
-	var myColor = d3.scaleOrdinal().range(["orange", "#00e600", "red", "brown", "slateblue"]).domain(data.map(function(d) { return d[0]; }));
+	var myColor = d3.scaleOrdinal().range(["orange", "#00e600", "red", "#ea0879", "slateblue"]).domain(data.map(function(d) { return d[0]; }));
 	var bar = svg.selectAll("myRect")
 		.data(data)
 		.enter();
