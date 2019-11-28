@@ -43,7 +43,7 @@
 </table>
 </div>
 <div id="Exp" height="30%" style="background-color:lightgray">
-	<b><center>My Journey</center></b>
+	<b><center><font size="6px"><i><u>My Journey</u></i></font></center></b>
 	<br>
 	<svg id="ExpSvg" />
 	
@@ -106,13 +106,13 @@
     .enter()
     .append('path')
     .attr('d', function (d) {
-      start = x(idToNode[d.source].name)+100;    // X position of start node on the X axis
-      end = x(idToNode[d.target].name)+100;      // X position of end node
-      return ['M', start, height-30,    // the arc starts at the coordinate x=start, y=height-30 (where the starting node is)
-        'A',                            // This means we're gonna build an elliptical arc
-        (start - end)/2 - 70, ',',    // Next 2 lines are the coordinates of the inflexion point. Height of this point is proportional with start - end distance
+      start = x(idToNode[d.source].name)+100;    
+      end = x(idToNode[d.target].name)+100;      
+      return ['M', start, height-30,    
+        'A',                            
+        (start - end)/2 - 70, ',',    
         (start - end)/2, 0, 0, ',',
-        start < end ? 1 : 0, end, ',', height-30] // We always want the arc on top. So if end is before start, putting 0 here turn the arc upside down.
+        start < end ? 1 : 0, end, ',', height-30] 
         .join(' ');
     })
     .style("fill", "none")
@@ -129,12 +129,10 @@
 	
 	nodes
       .on('mouseover', function (d) {
-        // Highlight the nodes: every node is green except of him
         nodes.style('fill', "purple")
-        d3.select(this).style('fill', '#69b3b2')
-        // Highlight the connections
+        d3.select(this).style('fill', '#00b3b3')
         links
-          .style('stroke', function (link_d) { return link_d.source === d.id || link_d.target === d.id ? '#69b3b2' : '#b8b8b8';})
+          .style('stroke', function (link_d) { return link_d.source === d.id || link_d.target === d.id ? '#00b3b3' : '#b8b8b8';})
           .style('stroke-width', function (link_d) { return link_d.source === d.id || link_d.target === d.id ? 4 : 1;});
 		 return tooltip.style("visibility", "visible")
 						.html("<div style=&quot;background-color:lightgray&quot;><b>"+d["name"]+"</b><br>"+d["desc"]+"</div>");
@@ -146,7 +144,7 @@
           .style('stroke-width', '1')
 		tooltip.style("visibility", "hidden");
       })
-	  .on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");});
+	  .on("mousemove", function(){return tooltip.style("top", (event.pageY+10)+"px").style("left",(event.pageX+10)+"px");});
 	  //.on("mouseout", function(){return tooltip.style("visibility", "hidden");});
 	});
 </script>
@@ -247,7 +245,7 @@ Observed the performance of map, reduce, and shuffling and sorting phases, inclu
 		.padding(.1);
 		
 	
-	var myColor = d3.scaleOrdinal().range(["orange", "darkgreen", "red", "brown", "slateblue"]).domain(data.map(function(d) { return d[0]; }));
+	var myColor = d3.scaleOrdinal().range(["orange", "#00e600", "red", "brown", "slateblue"]).domain(data.map(function(d) { return d[0]; }));
 	var bar = svg.selectAll("myRect")
 		.data(data)
 		.enter();
