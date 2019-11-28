@@ -1,0 +1,65 @@
+{
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Nirma University (2013)",
+      "desc": "Complted my bachelor's in Computer Engineering. Graduated in 2017."
+    },
+    {
+      "id": 2,
+      "name": "SilverTouch Intern (2015)",
+      "desc": " Collaborated in a team of 3 to create a website for grievance system for Gujarat government using Java JSP and Oracle 11g database"
+    },
+    {
+      "id": 3,
+      "name": "SAP Intern (2017)",
+      "desc": "Developed a 3D object viewer web application using Virtual and Augmented Reality concepts with JavaScript and SAP UI technologies which detects marker using devices camera and places a 3D object of car on top of it."
+    },
+    {
+      "id": 4,
+      "name": "SAP Labs Developer (2017)",
+      "desc": "Designed and developed web application for Information Lifecycle Management cloud customers using UI elements and ABAP programming language in backend. Generated REST based oData as a gateway to transfer data."
+    },
+    {
+      "id": 5,
+      "name": "Arizona STate University (2019)",
+      "desc": "Pursuing Masters in Computer Science. Expected graduation is May 2021."
+    },
+    {
+      "id": 6,
+      "name": "Facebook Summer Intern (2020)",
+      "desc": "I will do my internship at Facebook for summer 2020."
+    }
+  ],
+  "links": [
+    {
+      "source": 1,
+      "target": 5
+    },
+    {
+      "source": 2,
+      "target": 3
+    },
+    {
+      "source": 2,
+      "target": 4
+    },
+    {
+      "source": 2,
+      "target": 6
+    },
+
+    {
+      "source": 3,
+      "target": 4
+    },
+    {
+      "source": 3,
+      "target": 6
+    },
+    {
+      "source": 4,
+      "target": 6
+    }
+  ]
+}

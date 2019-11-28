@@ -1,0 +1,359 @@
+<html>
+<head>
+<title>RajviDesai</title>
+</head>
+<style>
+	.dark{
+		background-color:rgb(62,72,74)
+	}
+	h2,h1,h3{
+		text-align: center;
+		color:white;
+	}
+	table,div{
+		margin-left : 20px;
+		margin-right : 20px;
+	}
+</style>
+<script src='./scripts/d3.js'></script>
+<body>
+<div class="dark" id="Intro" height="30%">
+<table>
+<tr>
+	<td width="20%">
+	<center>
+	<a href="https://github.com/Rajvi023?tab=repositories">
+	<img src="images/git.png" width="30%" height="30%"/>
+	</a>
+	</center>
+	</td>
+	<td width="60%">
+	<h1>Rajvi Desai </h1>
+	<h2>Web Developer | Visualization Developer</h2>
+	<h2>rdesai6@asu.edu | +1(480)828-2288</h2>
+	</td>
+	<td width="20%">
+	<center>
+	<a href="https://www.linkedin.com/in/rajvidesai5/">
+	<img src="images/linkedIn.jpg" width="20%" height="10%"/>
+	</a>
+	</center>
+	</td>
+</tr>
+</table>
+</div>
+<div id="Exp" height="30%" style="background-color:lightgray">
+	<b><center>My Journey</center></b>
+	<br>
+	<svg id="ExpSvg" />
+	
+</div>
+<script>
+	var margin = {top: 20, right: 30, bottom: 20, left: 30},
+    width = 1100 - margin.left - margin.right,
+    height = 350 - margin.top - margin.bottom;
+
+	var svgT = d3.select("#ExpSvg")
+		//.append("svg")
+		.attr("width", width + margin.left + margin.right)
+		.attr("height", height + margin.top + margin.bottom)
+		.append("g")
+		.attr("transform",
+			  "translate(" + margin.left + "," + margin.top + ")");
+	
+	d3.json("timeLine.json", function(error,data) {
+		var allNodes = data.nodes.map(function(d){return d.name});
+		var x = d3.scalePoint()
+		.range([0, 900])
+		.domain(allNodes);
+		
+	var nodes = svgT
+    .selectAll("mynodes")
+    .data(data.nodes)
+    .enter()
+    .append("circle")
+      .attr("cx", function(d){ return(x(d.name))+100})
+      .attr("cy", height-30)
+      .attr("r", 13)
+      .style("fill", "purple")
+	
+	/*svgT
+    .selectAll("mylabels")
+    .data(data.nodes)
+    .enter()
+    .append("text")
+      .attr("x", function(d){ return(x(d.name)+100)})
+      .attr("y", height-10)
+      .text(function(d){ return(d.name)})
+      .style("text-anchor", "middle");*/
+	
+	svgT.append("g")
+			.attr("transform", "translate(100," + height + ")")
+			.call(d3.axisBottom(x))
+			.selectAll("text")
+			  //.attr("stroke","white")
+			  .attr("transform", "translate(0,0)rotate(-30)")
+			  .style("text-anchor", "end");
+	
+	var idToNode = {};
+	data.nodes.forEach(function (n) {
+		idToNode[n.id] = n;
+	});
+	
+	var links = svgT
+    .selectAll('mylinks')
+    .data(data.links)
+    .enter()
+    .append('path')
+    .attr('d', function (d) {
+      start = x(idToNode[d.source].name)+100;    // X position of start node on the X axis
+      end = x(idToNode[d.target].name)+100;      // X position of end node
+      return ['M', start, height-30,    // the arc starts at the coordinate x=start, y=height-30 (where the starting node is)
+        'A',                            // This means we're gonna build an elliptical arc
+        (start - end)/2 - 70, ',',    // Next 2 lines are the coordinates of the inflexion point. Height of this point is proportional with start - end distance
+        (start - end)/2, 0, 0, ',',
+        start < end ? 1 : 0, end, ',', height-30] // We always want the arc on top. So if end is before start, putting 0 here turn the arc upside down.
+        .join(' ');
+    })
+    .style("fill", "none")
+    .attr("stroke", "black");
+	
+	 var tooltip = d3.select("body")
+	.append("div")
+	.style("background-color", "black")
+	.style("color","white")
+	.style("opacity",0.8)
+	.style("position", "absolute")
+	.style("z-index", "10")
+	.style("visibility", "hidden");
+	
+	nodes
+      .on('mouseover', function (d) {
+        // Highlight the nodes: every node is green except of him
+        nodes.style('fill', "purple")
+        d3.select(this).style('fill', '#69b3b2')
+        // Highlight the connections
+        links
+          .style('stroke', function (link_d) { return link_d.source === d.id || link_d.target === d.id ? '#69b3b2' : '#b8b8b8';})
+          .style('stroke-width', function (link_d) { return link_d.source === d.id || link_d.target === d.id ? 4 : 1;});
+		 return tooltip.style("visibility", "visible")
+						.html("<div style=&quot;background-color:lightgray&quot;><b>"+d["name"]+"</b><br>"+d["desc"]+"</div>");
+      })
+      .on('mouseout', function (d) {
+        nodes.style('fill', "purple")
+        links
+          .style('stroke', 'black')
+          .style('stroke-width', '1')
+		tooltip.style("visibility", "hidden");
+      })
+	  .on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");});
+	  //.on("mouseout", function(){return tooltip.style("visibility", "hidden");});
+	});
+</script>
+
+<table class="dark">
+<tr>
+<td>
+<div id="Skills" height="40%" width="500px">
+</div>
+</td>
+<td class="dark">
+	<div class="dark" id="SkillsDesc" width="400px">
+	<div id="clickMe" width="500px">
+	<img src="images/click.png" height="100px" width="100px" style="
+    margin-top: -130px;
+    margin-left: -70px;"/>
+	</div>
+	<font color="white">
+	<div id="Java"><center>
+	<b><i><u>JAVA</u></i></b>
+	<h4>-: Captcha Generation :-</h4>
+      <p style="text-align:justify" align=”justify”>o	Implemented various design techniques like Randomized captcha and BBS algorithm in Java using Java frames to create and verify Captcha.</p>
+	
+	</center>
+	</div>
+    
+	<div id="JS"><center>
+		<b><i><u>JAVASCRIPT</u></i></b>
+		<h4>-: Movie Recommender :-</h4>
+		  <p style="text-align:justify" align=”justify”>o	Implemented several visualizations in Tableau software to derive statistics about the movies, genre and ratings of movies using TMDB
+(The Movie Database) 5000 movies dataset.<br>
+o	Calculated weighted rantings of movies based on user ratings, number of votes and the mean vote across the whole report. Also
+classified and ranked the movies according to their genre and their language. Displayed the results with visualizations in a webpage</p>
+		
+		</center>
+	</div>
+	<div id="html"><center>
+		<b><i><u>HTML / CSS</u></i></b>
+		<h4>-: Tourist Guide :-</h4>
+		  <p style="text-align:justify" align=”justify”>o	Used HTML and CSS and developed a website to show places to visit in my city, Ahmedabad using photoshoped images and slideshow animation in between them.</p>
+			
+	</center>
+	</div>
+	<div id="SAP"><center>
+		<b><i><u>SAP UI5/ ABAP</u></i></b>
+		<h4>-: Information Lifecycle Management Webapps :-</h4>
+		  <p style="text-align:justify" align=”justify”>o	Designed and developed web application for Information Lifecycle Management cloud customers using UI elements and ABAP
+programming language in backend. Generated REST based oData as a gateway to transfer data.<br>
+o	Developed various versions of social media collaboration library as per the newer customer requirements. This involved knowledge
+of JavaScript, SAP UI technologies, security supervision along with running test suites</p>
+	</center>
+	</div>
+	<div id="Hadoop"><center>
+		<b><i><u>Hadoop Map Reduce</u></i></b>
+	<h4>-: Text Mining using Hadoop MapReduce Framework :-</h4>
+      <p style="text-align:justify" align=”justify”>o	Implemented a program using Hadoop framework in a seminar project which found out the most common words in a dataset.
+Observed the performance of map, reduce, and shuffling and sorting phases, including execution time with memory usage.</p>
+	</center>
+    </div>
+
+
+<script>
+	//console.log("reached");
+	document.getElementById("clickMe").style.width = width-420;
+	document.getElementById("Java").style.display ="None";
+		document.getElementById("JS").style.display ="None";
+		document.getElementById("html").style.display ="None";
+		document.getElementById("SAP").style.display ="None";
+		document.getElementById("Hadoop").style.display ="None";
+	var margin = {top: 20, right: 30, bottom: 40, left: 90},
+    width = 460 - margin.left - margin.right,
+    height = 300 - margin.top - margin.bottom;
+
+	var svg = d3.select("#Skills")
+		    .append("svg")
+			.attr("width", width + margin.left + margin.right)
+			.attr("height", height + margin.top + margin.bottom)
+		    .append("g")
+			.attr("transform",
+				  "translate(" + margin.left + "," + margin.top + ")");
+
+	var x = d3.scaleLinear()
+			.domain([0, 10])
+			.range([ 0, width]);
+	svg.append("g")
+			.attr("transform", "translate(0," + height + ")")
+			.call(d3.axisBottom(x))
+			.selectAll("text")
+			.attr("fill","white")
+			  .attr("transform", "translate(-10,0)rotate(-45)")
+			  .style("text-anchor", "end");
+	
+	data=[["Java",9],["JavaScript",9],["HTML/CSS",7],["SAP UI5/ABAP",7],["Hadoop",6]];
+	
+	var y = d3.scaleBand()
+		.range([ 0, height ])
+		.domain(data.map(function(d) { return d[0]; }))
+		.padding(.1);
+		
+	
+	var myColor = d3.scaleOrdinal().range(["orange", "darkgreen", "red", "brown", "slateblue"]).domain(data.map(function(d) { return d[0]; }));
+	var bar = svg.selectAll("myRect")
+		.data(data)
+		.enter();
+	var barSelected = 0;
+		bar.append("rect")
+		.attr("x", x(0) )
+		.attr("y", function(d) { return y(d[0]); })
+		.attr("width", function(d) { return x(0); })
+		.attr("height", y.bandwidth() )
+		.attr("fill", function(d) { return myColor(d[0]); })
+		.on("click",function(d){
+			if(barSelected == 0){
+				svg.selectAll("rect").attr("opacity",0.4);
+				barSelected=1;
+				d3.select(this).attr("opacity",1);
+				skillDesc(d);
+			}else{
+				barSelected=0;
+				svg.selectAll("rect").attr("opacity",1);
+			}
+		});
+	
+	svg.append("g")
+		.call(d3.axisLeft(y))
+		.selectAll("text")
+		.attr("fill","white")
+		.attr("dy",".35em");
+		
+	svg.selectAll("rect")
+	  .transition()
+	  .duration(800)
+	  .attr("x", function(d) { return x(0); })
+	  .attr("width", function(d) { return x(d[1]); })
+	  .delay(function(d,i){return(i*100);});
+	  
+	bar.append("text")
+	  .transition()
+	  .duration(2000)
+      .attr("x", function(d) { return x(d[1]) - 10; })
+      .attr("y", function(d) { return y(d[0])+20; })
+      .attr("dy", ".35em")
+      .text(function(d) { return d[1]; })
+	  .attr("fill","white");
+	  
+
+function skillDesc(data){
+	//console.log(data);
+	
+	var margin = {top: 20, right: 30, bottom: 40, left: 90},
+    width = 460 - margin.left - margin.right,
+    height = 300 - margin.top - margin.bottom;
+	
+	
+	d3.select("#SkillsDesc").selectAll("svg").remove();
+	/*var svg = d3.select("#SkillsDesc")
+		    .append("svg")
+			.attr("width", width + margin.left + margin.right)
+			.attr("height", height + margin.top + margin.bottom)
+		    .append("g")
+			.attr("transform",
+				  "translate(" + margin.left + "," + margin.top + ")");
+	*/	
+	var descTitle = data[0];
+			
+	if(descTitle=="Java"){
+		document.getElementById("clickMe").style.display ="None";
+		document.getElementById("Java").style.display ="inline-block";
+		document.getElementById("JS").style.display ="None";
+		document.getElementById("html").style.display ="None";
+		document.getElementById("SAP").style.display ="None";
+		document.getElementById("Hadoop").style.display ="None";
+	}else if(descTitle=="JavaScript"){
+		document.getElementById("clickMe").style.display ="None";
+		document.getElementById("Java").style.display ="None";
+		document.getElementById("JS").style.display ="inline-block";
+		document.getElementById("html").style.display ="None";
+		document.getElementById("SAP").style.display ="None";
+		document.getElementById("Hadoop").style.display ="None";
+	}else if(descTitle=="HTML/CSS"){
+		document.getElementById("clickMe").style.display ="None";
+		document.getElementById("Java").style.display ="None";
+		document.getElementById("JS").style.display ="None";
+		document.getElementById("html").style.display ="inline-block";
+		document.getElementById("SAP").style.display ="None";
+		document.getElementById("Hadoop").style.display ="None";
+	}else if(descTitle=="SAP UI5/ABAP"){
+		document.getElementById("clickMe").style.display ="None";
+		document.getElementById("Java").style.display ="None";
+		document.getElementById("JS").style.display ="None";
+		document.getElementById("html").style.display ="None";
+		document.getElementById("SAP").style.display ="inline-block";
+		document.getElementById("Hadoop").style.display ="None";
+	}else if(descTitle=="Hadoop"){
+		document.getElementById("clickMe").style.display ="None";
+		document.getElementById("Java").style.display ="None";
+		document.getElementById("JS").style.display ="None";
+		document.getElementById("html").style.display ="None";
+		document.getElementById("SAP").style.display ="None";
+		document.getElementById("Hadoop").style.display ="inline-block";
+	}
+}
+
+</script>
+</div>
+</td>
+</tr>
+</table>
+</body>
+</html>
